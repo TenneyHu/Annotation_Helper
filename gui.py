@@ -21,11 +21,10 @@ class ImageLabelingApp:
 
         # 预设标签选项（单选）
         self.label_options = [
-            "0, Unrelated to the product.", 
-            "0, Related to the product, but Just life sharing.", 
-            "1, Obvious advertisement in the main text.", 
-            "1, Advertisement in the comment / Image.", 
-            "1, Product with a clear sales-oriented text."
+            "0, Just life sharing.", 
+            "1, Clear Ads only in main", 
+            "1, Covert Ads in the comment/Image", 
+            "1, Covert Ads with sales pitch Text"
         
         ]
         self.selected_label = tk.StringVar(value="")  # 绑定单选变量
@@ -45,15 +44,15 @@ class ImageLabelingApp:
         self.left_frame.pack(side=tk.LEFT, padx=20, pady=10, fill=tk.Y)
 
         tk.Label(self.left_frame, text="标题（Title）:", font=("Arial", 12, "bold")).pack(anchor="w")
-        self.entry_title = tk.Entry(self.left_frame, width=50, font=("Arial", 12))
+        self.entry_title = tk.Entry(self.left_frame, width=40, font=("Arial", 12))
         self.entry_title.pack(pady=5)
 
         tk.Label(self.left_frame, text="描述（Description）:", font=("Arial", 12, "bold")).pack(anchor="w")
-        self.text_description = tk.Text(self.left_frame, height=10, width=50, font=("Arial", 12))
+        self.text_description = tk.Text(self.left_frame, height=10, width=40, font=("Arial", 12))
         self.text_description.pack(pady=5)
 
         tk.Label(self.left_frame, text="评论（Comments）:", font=("Arial", 12, "bold")).pack(anchor="w")
-        self.text_comments = tk.Text(self.left_frame, height=30, width=50, font=("Arial", 12))
+        self.text_comments = tk.Text(self.left_frame, height=30, width=40, font=("Arial", 12))
         self.text_comments.pack(pady=5)
 
         # **中间区域 - 图片显示和按钮**
@@ -70,8 +69,6 @@ class ImageLabelingApp:
         self.btn_frame = tk.Frame(self.center_frame)
         self.btn_frame.pack(pady=10)
 
-        self.btn_prev_folder = tk.Button(self.btn_frame, text="上一文件夹", command=self.prev_folder, font=("Arial", 12))
-        self.btn_prev_folder.pack(side=tk.LEFT, padx=5)
 
         self.btn_prev_image = tk.Button(self.btn_frame, text="上一张", command=self.prev_image, font=("Arial", 12))
         self.btn_prev_image.pack(side=tk.LEFT, padx=5)
@@ -79,8 +76,6 @@ class ImageLabelingApp:
         self.btn_next_image = tk.Button(self.btn_frame, text="下一张", command=self.next_image, font=("Arial", 12))
         self.btn_next_image.pack(side=tk.LEFT, padx=5)
 
-        self.btn_next_folder = tk.Button(self.btn_frame, text="下一文件夹", command=self.next_folder, font=("Arial", 12))
-        self.btn_next_folder.pack(side=tk.LEFT, padx=5)
 
         # **加载文件夹**
         self.btn_load = tk.Button(self.center_frame, text="加载文件夹", command=self.load_folder, font=("Arial", 12, "bold"))
@@ -100,7 +95,15 @@ class ImageLabelingApp:
         for label in self.label_options:
             rb = tk.Radiobutton(self.radio_frame, text=label, variable=self.selected_label, value=label, font=("Arial", 12))
             rb.pack(anchor="w")
+        self.folder_nav_frame = tk.Frame(self.right_frame)
+        
+        self.folder_nav_frame.pack(pady=20)
 
+        self.btn_prev_folder = tk.Button(self.folder_nav_frame, text="上一文件夹", command=self.prev_folder, font=("Arial", 12))
+        self.btn_prev_folder.pack(side=tk.LEFT, padx=5)
+
+        self.btn_next_folder = tk.Button(self.folder_nav_frame, text="下一文件夹", command=self.next_folder, font=("Arial", 12))
+        self.btn_next_folder.pack(side=tk.LEFT, padx=5)
     def load_folder(self):
         """选择父文件夹并递归加载所有子文件夹（跳过已标注的），并显示标注进度"""
         folder_selected = filedialog.askdirectory()
